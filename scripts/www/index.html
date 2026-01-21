@@ -1,11 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang=h-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>智能管理平台导航</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        font-size: 18px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .error-icon {
+        font-size: 60px;
+        color: #e74c3c;
+      }
+
+      .error-title {
+        font-size: 24px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .error-message {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .retry-btn {
+        padding: 8px 24px;
+        background: #333333;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+      </div>
+
+      <div id="error" class="error hidden">
+        <div class="error-icon">⚠️</div>
+        <div class="error-title">网络错误</div>
+        <div class="error-message">
+          请检查网络连接或稍后重试
+        </div>
+        <button class="retry-btn" onclick="checkAndRedirect()">重试</button>
+      </div>
+    </div>
+
+    <script>
+      const targetUrl =
+        "https://art-design-pro-main-template.ricemiso.com/";
+
+      async function checkAndRedirect() {
+        const loading = document.getElementById("loading");
+        const error = document.getElementById("error");
+
+        // 显示加载状态
+        loading.classList.remove("hidden");
+        error.classList.add("hidden");
+
+        try {
+          // 使用fetch检测链接
+          const response = await fetch(targetUrl, {
+            method: "HEAD",
+            mode: "no-cors",
+            timeout: 10000,
+          });
+
+          // 无论响应如何，尝试跳转
+          window.location.href = targetUrl;
+        } catch (e) {
+          // 显示错误信息
+          loading.classList.add("hidden");
+          error.classList.remove("hidden");
+        }
+      }
+
+      // 页面加载后立即检测
+      window.addEventListener("load", checkAndRedirect);
+    </script>
+  </body>
 </html>
